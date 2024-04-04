@@ -2,6 +2,7 @@ package controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import dao.Dao;
+import dto.Task;
 import dto.User;
 
 @WebServlet("/userlogin")
@@ -28,6 +30,11 @@ public class Login extends HttpServlet {
 //				verify the password
 				if(u.getUserPassword().equals(password)) {
 //					login success
+//					create session and get data
+//					get all data related to user id from User
+					List<Task> tasks = dao.getAllTaskByUserId(u.getUserId());
+					req.setAttribute("tasks",tasks);
+					
 					req.getSession().setAttribute("user",u);
 					req.getRequestDispatcher("home.jsp").include(req,resp);
 				}
